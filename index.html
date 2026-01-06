@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiceyWorld — Лицейский Майнкрафт-сервер</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Minecraft&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Базовые стили */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .minecraft-font {
+            font-family: 'Minecraft', monospace;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .primary-gradient {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+        }
+
+        .accent-gradient {
+            background: linear-gradient(135deg, #f59e0b, #f97316);
+        }
+
+        .primary-color {
+            color: #8b5cf6;
+        }
+
+        /* Шапка */
+        header {
+            background: rgba(15, 23, 42, 0.98);
+            border-bottom: 2px solid #8b5cf6;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(139, 92, 246, 0.2);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            color: #8b5cf6;
+            font-size: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #f8fafc;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #8b5cf6;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Главный баннер */
+        .hero {
+            padding-top: 150px;
+            padding-bottom: 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.9) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            margin: 40px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.25);
+            border: 3px solid #8b5cf6;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .server-title {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #cbd5e1;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Блок с IP-адресом */
+        .server-ip-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            display: inline-block;
+            margin: 30px auto;
+            max-width: 700px;
+            width: 90%;
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.2);
+            border: 3px solid #8b5cf6;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .server-ip-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(139, 92, 246, 0.3);
+        }
+
+        .ip-title {
+            font-size: 1.2rem;
+            color: #8b5cf6;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .ip-address {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #f8fafc;
+            word-break: break-all;
+            padding: 15px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 15px;
+            border: 2px dashed #8b5cf6;
+            margin: 15px 0;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.5);
+        }
+
+        /* Информационные карточки */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .info-card {
+            background: rgba(30, 41, 59, 0.9);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid #475569;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-card:hover {
+            transform: translateY(-10px);
+            border-color: #8b5cf6;
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.2);
+        }
+
+        .info-card i {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .info-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #f8fafc;
+        }
+
+        /* Секции */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+
+        /* Особенности */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid #475569;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: #8b5cf6;
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.25);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        /* Статус сервера */
+        .status-section {
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px auto;
+            max-width: 800px;
+            border: 3px solid #475569;
+            text-align: center;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            margin: 10px;
+        }
+
+        .status-checking {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: white;
+        }
+
+        /* Футер */
+        footer {
+            background: #0f172a;
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 80px;
+            border-top: 3px solid #8b5cf6;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: #8b5cf6;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 10px;
+            color: #8b5cf6;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: #8b5cf6;
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Анимации */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .server-title {
+                font-size: 2.5rem;
+            }
+            
+            .ip-address {
+                font-size: 1.8rem;
+            }
+            
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                right: 20px;
+                background: rgba(15, 23, 42, 0.95);
+                flex-direction: column;
+                padding: 20px;
+                border-radius: 15px;
+                border: 2px solid #8b5cf6;
+                box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+                backdrop-filter: blur(10px);
+                min-width: 200px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero-image {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-cube logo-icon floating"></i>
+                    <span class="logo-text minecraft-font">LiceyWorld</span>
+                </div>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="#home">Главная</a></li>
+                    <li><a href="#about">О сервере</a></li>
+                    <li><a href="#features">Особенности</a></li>
+                    <li><a href="#schedule">Расписание</a></li>
+                    <li><a href="#social">Соцсети</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Главный баннер -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="server-title minecraft-font">LiceyWorld</h1>
+                <p class="subtitle">
+                    Лицейский Майнкрафт-сервер — место, где встречаются друзья и создаются легенды!
+                </p>
+                
+                <div class="hero-image">
+                    <img src="liceyworld.jpg" alt="Minecraft Landscape">
+                    <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(139, 92, 246, 0.9)); padding: 20px; color: white;">
+                        <h3 style="margin: 0;">Добро пожаловать в наш мир!</h3>
+                    </div>
+                </div>
+                
+                <div class="server-ip-card" onclick="copyIP()">
+                    <div class="ip-title">Подключайся прямо сейчас!</div>
+                    <div class="ip-address minecraft-font">LiceyWorld.aternos.me</div>
+                    <div class="server-version" style="color: #cbd5e1; margin: 10px 0;">
+                        <i class="fas fa-code-branch"></i> Версия: <strong style="color: #8b5cf6;">1.21</strong>
+                    </div>
+                    <button class="copy-btn">
+                        <i class="fas fa-copy"></i> Скопировать IP-адрес
+                    </button>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <i class="fas fa-users"></i>
+                        <h3>Игроков онлайн</h3>
+                        <p class="online-count minecraft-font" style="font-size: 1.8rem;">?</p>
+                        <p style="color: #94a3b8;">Скоро сюда добавят мониторинг сервера</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-clock"></i>
+                        <h3>Расписание</h3>
+                        <p>Будни: 17:00-21:00+</p>
+                        <p>Выходные: по запросу</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-gamepad"></i>
+                        <h3>Режим</h3>
+                        <p>Выживание</p>
+                        <p>Vanilla без плагинов</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-user-shield"></i>
+                        <h3>Защита</h3>
+                        <p>Честная игра</p>
+                        <p>Админы следят за порядком</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- О сервере -->
+    <section id="about" class="section" style="background: rgba(15, 23, 42, 0.7);">
+        <div class="container">
+            <h2 class="section-title">О LiceyWorld</h2>
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <p style="font-size: 1.2rem; margin-bottom: 30px; color: #e2e8f0; line-height: 1.8;">
+                    Добро пожаловать на самый эпичный лицейский сервер Minecraft! Здесь собираются лучшие из лучших, 
+                    чтобы строить, исследовать и создавать невероятные проекты вместе.
+                </p>
+                <p style="font-size: 1.1rem; margin-bottom: 30px; color: #cbd5e1; line-height: 1.8;">
+                    Наш сервер создан специально для учеников Лицея Лобни, где можно отлично провести время после уроков, 
+                    развить креативность и найти новых друзей. У нас дружелюбное комьюнити и администрация, 
+                    которая всегда поможет в трудную минуту.
+                </p>
+                
+                <!-- СТАТУС СЕРВЕРА - ИСПРАВЛЕН -->
+                <div class="status-section">
+                    <h3 style="color: #8b5cf6; margin-bottom: 20px;">
+                        <i class="fas fa-server"></i> Статус сервера
+                    </h3>
+                    <div class="status-badge status-checking">
+                        <i class="fas fa-question-circle"></i> Неизвестно
+                    </div>
+                    <p style="color: #cbd5e1; margin-top: 20px;">
+                        Скоро сюда добавят мониторинг сервера<br>
+                        Пока что просто попробуй подключиться по IP выше
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Особенности - ВСЕ ПРАВКИ ВНЕСЕНЫ -->
+    <section id="features" class="section">
+        <div class="container">
+            <h2 class="section-title">Особенности сервера</h2>
+            <div class="features-grid">
+                <!-- ВСЕ ТЕКСТЫ ИСПРАВЛЕНЫ -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <h3 style="color: #f8fafc;">Открытый мир</h3>
+                    <p style="color: #cbd5e1;">Нет спавна и варпов. Только чистая генерация мира. Ищи место для базы где хочешь!</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 style="color: #f8fafc;">Честная игра</h3>
+                    <p style="color: #cbd5e1;">Нет плагинов привата. Работаем на доверии и уважении. Читеров баним сразу.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 style="color: #f8fafc;">Лицейское комьюнити</h3>
+                    <p style="color: #cbd5e1;">Только ученики лицея. Знакомые лица, общие темы, помощь в учебе и в игре.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 style="color: #f8fafc;">Активные админы</h3>
+                    <p style="color: #cbd5e1;">Администрация всегда онлайн во время работы сервера. Помогаем, отвечаем, следим за порядком.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-campground"></i>
+                    </div>
+                    <h3 style="color: #f8fafc;">Vanilla геймплей</h3>
+                    <p style="color: #cbd5e1;">Минимальные плагины. Сохраняем дух оригинального Minecraft без лишних модификаций.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 style="color: #f8fafc;">Ивентов пока нет</h3>
+                    <p style="color: #cbd5e1;">На сервере нет ивентов. Но разработчики очень стараются, и, возможно, в будущем появятся серверные ивенты.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Расписание работы -->
+    <section id="schedule" class="section" style="background: rgba(15, 23, 42, 0.7);">
+        <div class="container">
+            <h2 class="section-title">Расписание работы</h2>
+            <div class="status-section">
+                <div style="text-align: left; max-width: 600px; margin: 0 auto;">
+                    <div style="display: flex; align-items: start; margin: 25px 0;">
+                        <i class="fas fa-calendar-day" style="color: #8b5cf6; font-size: 1.5rem; margin-right: 15px; margin-top: 5px;"></i>
+                        <div>
+                            <h3 style="color: #8b5cf6; margin-bottom: 5px;">Будние дни (Пн-Пт)</h3>
+                            <p style="color: #e2e8f0;">Сервер включается в <strong>17:00</strong> и работает <strong>до 21:00</strong> или пока все не отключатся</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: start; margin: 25px 0;">
+                        <i class="fas fa-calendar-weekend" style="color: #8b5cf6; font-size: 1.5rem; margin-right: 15px; margin-top: 5px;"></i>
+                        <div>
+                            <h3 style="color: #8b5cf6; margin-bottom: 5px;">Выходные (Сб-Вс)</h3>
+                            <p style="color: #e2e8f0;">По запросу администрации. Следите за анонсами в Telegram-канале!</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: start; margin: 25px 0;">
+                        <i class="fas fa-exclamation-triangle" style="color: #f59e0b; font-size: 1.5rem; margin-right: 15px; margin-top: 5px;"></i>
+                        <div>
+                            <h3 style="color: #f59e0b; margin-bottom: 5px;">Важно знать!</h3>
+                            <p style="color: #e2e8f0;">Сервер на Aternos — требует ручной запуск. Обычно включаем в течение 20 минут после 17:00.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Соцсети -->
+    <section id="social" class="section">
+        <div class="container">
+            <h2 class="section-title">Наши соцсети</h2>
+            <div class="status-section">
+                <i class="fab fa-telegram" style="font-size: 4rem; color: #8b5cf6; margin-bottom: 20px;"></i>
+                <h3 style="color: #f8fafc; margin-bottom: 15px;">Telegram</h3>
+                <p style="color: #cbd5e1; margin-bottom: 25px;">Подписывайся, чтобы не пропустить запуск сервера и важные анонсы!</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+                    <a href="https://t.me/LiceyWorldSupportBot" target="_blank" style="text-decoration: none; width: 100%; max-width: 400px;">
+                        <div style="background: linear-gradient(135deg, #8b5cf6, #3b82f6); color: white; padding: 15px 25px; border-radius: 50px; text-align: center; font-weight: 600; transition: all 0.3s ease; cursor: pointer;">
+                            <i class="fas fa-robot"></i> Бот поддержки: @LiceyWorldSupportBot
+                        </div>
+                    </a>
+                    
+                    <a href="https://t.me/LiceyWorld" target="_blank" style="text-decoration: none; width: 100%; max-width: 400px;">
+                        <div style="background: linear-gradient(135deg, #f59e0b, #f97316); color: white; padding: 15px 25px; border-radius: 50px; text-align: center; font-weight: 600; transition: all 0.3s ease; cursor: pointer;">
+                            <i class="fab fa-telegram"></i> Канал: @LiceyWorld
+                        </div>
+                    </a>
+                </div>
+                
+                <p style="color: #94a3b8; margin-top: 30px;">
+                    <i class="fas fa-bell"></i> В канале публикуем анонсы и новости сервера
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="minecraft-font">LiceyWorld</h3>
+                    <p style="color: #cbd5e1;">Лицейский Minecraft-сервер. Честная игра, открытый мир, свое комьюнити.</p>
+                    <div class="social-links">
+                        <a href="https://t.me/LiceyWorldSupportBot" target="_blank" title="Бот поддержки">
+                            <i class="fas fa-robot"></i>
+                        </a>
+                        <a href="https://t.me/LiceyWorld" target="_blank" title="Telegram канал">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Техническая информация</h3>
+                    <p style="color: #cbd5e1;"><strong>IP:</strong> LiceyWorld.aternos.me</p>
+                    <p style="color: #cbd5e1;"><strong>Версия:</strong> Minecraft 1.21</p>
+                    <p style="color: #cbd5e1;"><strong>Платформа:</strong> Aternos</p>
+                    <p style="color: #cbd5e1;"><strong>Режим:</strong> Выживание (Vanilla)</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <p style="color: #cbd5e1;">Только для учеников Лицея Лобни</p>
+                    <p style="color: #cbd5e1;">По всем вопросам:</p>
+                    <p style="color: #cbd5e1;">Telegram: @LiceyWorldSupportBot</p>
+                    <p style="color: #cbd5e1;">Или обратись к админу в игре</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025–2026 LiceyWorld — Лицейский Minecraft-сервер. Неофициальный проект.</p>
+                <p style="margin-top: 10px; font-size: 0.8rem;">Minecraft © Mojang Studios. Данный сайт не аффилирован с Mojang или Microsoft.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ПРОСТОЙ СКРИПТ
+        
+        // Копирование IP
+        function copyIP() {
+            const ip = 'LiceyWorld.aternos.me';
+            navigator.clipboard.writeText(ip).then(() => {
+                // Меняем текст кнопки на секунду
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Скопировано!';
+                btn.style.background = 'linear-gradient(135deg, #10b981, #34d399)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = 'linear-gradient(135deg, #8b5cf6, #3b82f6)';
+                }, 2000);
+            });
+        }
+        
+        // Мобильное меню
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+        
+        // Закрытие меню при клике вне его
+        document.addEventListener('click', function(event) {
+            const navLinks = document.querySelector('.nav-links');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (window.innerWidth <= 768 && 
+                !event.target.closest('.nav-links') && 
+                !event.target.closest('.mobile-menu-btn') &&
+                navLinks.style.display === 'flex') {
+                navLinks.style.display = 'none';
+            }
+        });
+        
+        // Плавная прокрутка
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Закрываем мобильное меню
+                    if(window.innerWidth <= 768) {
+                        document.querySelector('.nav-links').style.display = 'none';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
