@@ -509,7 +509,7 @@
             
             <div class="ip-square">
                 <div class="ip-label">⚡ IP-АДРЕС ⚡</div>
-                <div class="ip-address">37.9.15.81:32214</div>
+                <div class="ip-address">liceyworld.mc-join.me</div>
                 <button class="copy-btn" id="copyBtn"><i class="fas fa-copy"></i> Скопировать IP</button>
                 <div class="version"><i class="fas fa-code-branch"></i> Версия 1.21.4</div>
             </div>
@@ -557,7 +557,7 @@
             <h4>Игроки онлайн: <span id="onlineCount">0</span> из <span id="maxPlayers">?</span></h4>
             <div id="playersList" class="players-list">Загрузка...</div>
             <div id="noPlayers" style="display: none;">Сейчас никого нет на сервере</div>
-            <p style="margin-top: 20px;">🎉 Сервер работает и ждет новых игроков!<br>Подключайся по IP: <strong style="color:#ffb347;">37.9.15.81:32214</strong></p>
+            <p style="margin-top: 20px;">🎉 Сервер работает и ждет новых игроков!<br>Подключайся по IP: <strong style="color:#ffb347;">liceyworld.mc-join.me</strong></p>
         </div>
     </div>
 </section>
@@ -608,26 +608,24 @@
 <footer class="footer">
     <div class="container">
         <p>© 2025–2026 LiceyWorld — Minecraft-сервер. Неофициальный проект.</p>
-        <p style="margin-top: 12px; font-size: 0.85rem; color: #888;">IP: 37.9.15.81:32214 | Версия 1.21.4</p>
+        <p style="margin-top: 12px; font-size: 0.85rem; color: #888;">IP: liceyworld.mc-join.me | Версия 1.21.4</p>
     </div>
 </footer>
 
 <script>
-    const SERVER_IP = "37.9.15.81";
-    const SERVER_PORT = "32214";
+    const SERVER_HOST = "liceyworld.mc-join.me";
     
     function toggleMenu() {
         document.getElementById('navLinks').classList.toggle('active');
     }
     
     function copyIP() {
-        const fullIP = `${SERVER_IP}:${SERVER_PORT}`;
-        navigator.clipboard.writeText(fullIP).then(() => {
+        navigator.clipboard.writeText(SERVER_HOST).then(() => {
             const btn = document.getElementById('copyBtn');
             const old = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-check"></i> Скопировано!';
             setTimeout(() => btn.innerHTML = old, 1500);
-            showToast("✅ IP скопирован: " + fullIP);
+            showToast("✅ IP скопирован: " + SERVER_HOST);
         });
     }
     document.getElementById('copyBtn').addEventListener('click', copyIP);
@@ -642,14 +640,13 @@
     
     async function checkServer() {
         try {
-            // Используем API mcstatus.xyz (работает с любыми портами)
-            const response = await fetch(`https://mcstatus.xyz/api/status?host=${SERVER_IP}&port=${SERVER_PORT}`, {
+            // Используем API mcstatus.xyz (работает с доменами)
+            const response = await fetch(`https://mcstatus.xyz/api/status?host=${SERVER_HOST}`, {
                 cache: 'no-store',
                 headers: { 'Cache-Control': 'no-cache' }
             });
             const data = await response.json();
             
-            // API возвращает: { online: true/false, players: { online, max }, players_list: [...] }
             const isOnline = data.online === true;
             const playersOnline = isOnline ? (data.players?.online || 0) : 0;
             const maxPlayers = data.players?.max || "?";
@@ -664,7 +661,7 @@
             console.error("Ошибка проверки через mcstatus.xyz:", error);
             // Если ошибка, пробуем через резервный API
             try {
-                const backupResponse = await fetch(`https://api.mcsrvstat.us/2/${SERVER_IP}:${SERVER_PORT}`, {
+                const backupResponse = await fetch(`https://api.mcsrvstat.us/2/${SERVER_HOST}`, {
                     cache: 'no-store'
                 });
                 const backupData = await backupResponse.json();
@@ -744,7 +741,7 @@
         }
     }
     
-    // Запускаем проверку сразу и каждые 30 секунд
+    // Запускаем проверку сразу и каждые 10 секунд
     checkServer();
     setInterval(checkServer, 10000);
     
